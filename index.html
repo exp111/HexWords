@@ -4,121 +4,12 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <link rel="stylesheet" href="index.css">
+    <title>HexWords</title>
 </head>
-<style>
-    body {
-        --gap: 5px;
-    }
-
-    .grid {
-        display: flex;
-        flex-direction: row;
-        gap: var(--gap);
-    }
-
-    .column {
-        display: flex;
-        flex-direction: column;
-        gap: var(--gap);
-        transform: translateX(calc(-13px * var(--number)));
-    }
-
-    .column:nth-child(even) {
-        margin-top: 25px;
-    }
-
-    .hex {
-        width: 50px;
-        height: 50px;
-        background: pink;
-        line-height: 50px;
-        text-align: center;
-        clip-path: polygon(75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%, 25% 0);
-    }
-
-    .empty {
-        opacity: 0;
-    }
-</style>
 <body>
 <div id="grid" class="grid"></div>
 </body>
-<script>
-    //https://www.redblobgames.com/grids/hexagons/
-    // offset coords, odd-q
-    const grid = [
-        [null, 1, 2, 3, null],
-        [4, 5, 6, 7, 8],
-        [9, 10, 11, 12, 13],
-        [14, 15, 16, 17, 18],
-        [null, null, 19, null, null],
-    ];
-
-    function createGrid() {
-        let parent = document.getElementById("grid");
-        for (let i in grid) {
-            let columnEl = document.createElement("div");
-            columnEl.classList.add("column");
-            columnEl.style.setProperty("--number", i);
-            parent.appendChild(columnEl);
-        }
-        for (let row in grid) {
-            for (let column in grid[row]) {
-                let hexEl = document.createElement("div");
-                let val = getHexAt(column, row);
-                if (val == null) {
-                    hexEl.classList.add("empty");
-                } else {
-                    hexEl.textContent = `${val}`;
-                }
-                hexEl.onclick = () => onclick(parseInt(column), parseInt(row));
-                hexEl.classList.add("hex");
-                parent.children[column].appendChild(hexEl);
-            }
-        }
-    }
-
-    const direction_differences = [
-        // even cols
-        [[+1, 0], [+1, -1], [0, -1],
-            [-1, -1], [-1, 0], [0, +1]],
-        // odd cols
-        [[+1, +1], [+1, 0], [0, -1],
-            [-1, 0], [-1, +1], [0, +1]],
-    ];
-
-    function getNeighbours(x, y) {
-        let neighbours = [];
-        let parity = x & 1;
-        for (let diff of direction_differences[parity]) {
-            let newX = x + diff[0];
-            let newY = y + diff[1];
-            if (newY < 0 || newY >= grid.length)
-                continue;
-            if (newX < 0 || newX >= grid[newY].length)
-                continue;
-            let neigh = getHexAt(newX, newY);
-            if (neigh == null)
-                continue;
-            neighbours.push([newX, newY]);
-        }
-        return neighbours;
-    }
-    createGrid();
-    function getHexAt(x, y) {
-        return grid[y][x];
-    }
-    function getHexElAt(x, y) {
-        return document.getElementById("grid").children[x].children[y];
-    }
-    function onclick(x,y) {
-        console.log(`el: ${x}, ${y}`);
-        let neighbours = getNeighbours(x,y);
-        console.log("neighbours:");
-        for (let n of neighbours) {
-            console.log(`pos: ${n[0]},${n[1]}; val: ${getHexAt(n[0], n[1])}`);
-        }
-    }
-</script>
+<script src="grid.js"></script>
+<script src="index.js"></script>
 </html>
