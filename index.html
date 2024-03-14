@@ -63,21 +63,56 @@
             columnEl.style.setProperty("--number", i);
             parent.appendChild(columnEl);
         }
-        for (let row of grid) {
-            for (let column in row) {
+        for (let row in grid) {
+            for (let column in grid[row]) {
                 let hexEl = document.createElement("div");
-                let val = row[column];
+                let val = grid[row][column];
                 if (val == null) {
                     hexEl.classList.add("empty");
                 } else {
                     hexEl.textContent = `${val}`;
                 }
+                hexEl.onclick = () => onclick(parseInt(column), parseInt(row));
                 hexEl.classList.add("hex");
                 parent.children[column].appendChild(hexEl);
             }
         }
     }
 
+    const direction_differences = [
+        // even cols
+        [[+1, 0], [+1, -1], [0, -1],
+            [-1, -1], [-1, 0], [0, +1]],
+        // odd cols
+        [[+1, +1], [+1, 0], [0, -1],
+            [-1, 0], [-1, +1], [0, +1]],
+    ];
+
+    function getNeighbours(x, y) {
+        let neighbours = [];
+        let parity = x & 1;
+        for (let diff of direction_differences[parity]) {
+            let newX = x + diff[0];
+            let newY = y + diff[1];
+            if (newY < 0 || newY >= grid.length)
+                continue;
+            if (newX < 0 || newX >= grid[newY].length)
+                continue;
+            let neigh = grid[newY][newX];
+            if (neigh == null)
+                continue;
+            neighbours.push([newX, newY]);
+        }
+        return neighbours;
+    }
     createGrid();
+    function onclick(x,y) {
+        console.log(`el: ${x}, ${y}`);
+        let neighbours = getNeighbours(x,y);
+        console.log("neighbours:");
+        for (let n of neighbours) {
+            console.log(`pos: ${n[0]},${n[1]}; val: ${grid[n[1]][n[0]]}`);
+        }
+    }
 </script>
 </html>
