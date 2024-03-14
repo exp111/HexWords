@@ -8,20 +8,20 @@
 </head>
 <style>
     body {
-        --gap: 3px;
+        --gap: 5px;
     }
 
     .grid {
         display: flex;
         flex-direction: row;
-        gap: 0px;
+        gap: var(--gap);
     }
 
     .column {
         display: flex;
         flex-direction: column;
         gap: var(--gap);
-        transform: translateX(calc((-10px + var(--gap)) * var(--number)));
+        transform: translateX(calc(-13px * var(--number)));
     }
 
     .column:nth-child(even) {
