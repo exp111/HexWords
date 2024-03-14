@@ -8,17 +8,20 @@
 </head>
 <style>
     body {
-        --gap: 0px;
+        --gap: 3px;
     }
     .grid {
+        display: flex;
+        flex-direction: row;
+        gap: 0px;
+    }
+    .column {
         display: flex;
         flex-direction: column;
         gap: var(--gap);
     }
-    .row {
-        display: flex;
-        flex-direction: row;
-        gap: var(--gap);
+    .column:nth-child(even) {
+        margin-top: 25px;
     }
     .hex {
         width: 50px;
@@ -27,9 +30,6 @@
         line-height: 50px;
         text-align: center;
         clip-path: polygon(75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%, 25% 0);
-    }
-    .hex:nth-child(even) {
-        margin-top: 25px;
     }
     .empty {
         opacity: 0;
@@ -50,20 +50,23 @@
     ];
     function createGrid() {
         let parent = document.getElementById("grid");
+        for (let r of grid) {
+            let columnEl = document.createElement("div");
+            columnEl.classList.add("column");
+            parent.appendChild(columnEl);
+        }
         for (let row of grid) {
-            let rowEl = document.createElement("div");
-            rowEl.classList.add("row");
-            parent.appendChild(rowEl);
-            for (let column of row) {
+            for (let column in row) {
                 let hexEl = document.createElement("div");
-                if (column == null) {
+                let val = row[column];
+                if (val == null) {
                     hexEl.classList.add("empty");
                 }
                 else {
-                    hexEl.textContent = `${column}`;
+                    hexEl.textContent = `${val}`;
                 }
                 hexEl.classList.add("hex");
-                rowEl.appendChild(hexEl);
+                parent.children[column].appendChild(hexEl);
             }
         }
     }
