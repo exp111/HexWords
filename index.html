@@ -1,0 +1,72 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<style>
+    body {
+        --gap: 0px;
+    }
+    .grid {
+        display: flex;
+        flex-direction: column;
+        gap: var(--gap);
+    }
+    .row {
+        display: flex;
+        flex-direction: row;
+        gap: var(--gap);
+    }
+    .hex {
+        width: 50px;
+        height: 50px;
+        background: pink;
+        line-height: 50px;
+        text-align: center;
+        clip-path: polygon(75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%, 25% 0);
+    }
+    .hex:nth-child(even) {
+        margin-top: 25px;
+    }
+    .empty {
+        opacity: 0;
+    }
+</style>
+<body>
+    <div id="grid" class="grid"></div>
+</body>
+<script>
+    //https://www.redblobgames.com/grids/hexagons/
+    // offset coords, odd-q
+    const grid = [
+        [null,1,2,3,null],
+        [4,5,6,7,8],
+        [9,10,11,12,13],
+        [14,15,16,17,18],
+        [null,null,19,null,null],
+    ];
+    function createGrid() {
+        let parent = document.getElementById("grid");
+        for (let row of grid) {
+            let rowEl = document.createElement("div");
+            rowEl.classList.add("row");
+            parent.appendChild(rowEl);
+            for (let column of row) {
+                let hexEl = document.createElement("div");
+                if (column == null) {
+                    hexEl.classList.add("empty");
+                }
+                else {
+                    hexEl.textContent = `${column}`;
+                }
+                hexEl.classList.add("hex");
+                rowEl.appendChild(hexEl);
+            }
+        }
+    }
+    createGrid();
+</script>
+</html>
