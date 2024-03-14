@@ -66,7 +66,7 @@
         for (let row in grid) {
             for (let column in grid[row]) {
                 let hexEl = document.createElement("div");
-                let val = grid[row][column];
+                let val = getHexAt(column, row);
                 if (val == null) {
                     hexEl.classList.add("empty");
                 } else {
@@ -98,7 +98,7 @@
                 continue;
             if (newX < 0 || newX >= grid[newY].length)
                 continue;
-            let neigh = grid[newY][newX];
+            let neigh = getHexAt(newX, newY);
             if (neigh == null)
                 continue;
             neighbours.push([newX, newY]);
@@ -106,12 +106,18 @@
         return neighbours;
     }
     createGrid();
+    function getHexAt(x, y) {
+        return grid[y][x];
+    }
+    function getHexElAt(x, y) {
+        return document.getElementById("grid").children[x].children[y];
+    }
     function onclick(x,y) {
         console.log(`el: ${x}, ${y}`);
         let neighbours = getNeighbours(x,y);
         console.log("neighbours:");
         for (let n of neighbours) {
-            console.log(`pos: ${n[0]},${n[1]}; val: ${grid[n[1]][n[0]]}`);
+            console.log(`pos: ${n[0]},${n[1]}; val: ${getHexAt(n[0], n[1])}`);
         }
     }
 </script>
